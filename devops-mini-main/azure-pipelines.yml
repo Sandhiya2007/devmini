@@ -1,5 +1,5 @@
 
-# MediCare - Doctor Appointment Website CI Pipeline
+# MediCare - CI Pipeline
 
 trigger:
   - main
@@ -13,29 +13,28 @@ steps:
 
   - script: |
       echo "Checking MediCare project files..."
-
       test -f index.html
       test -f css/styles.css
       test -f js/app.js
       test -f js/doctors.js
       test -f package.json
-
       echo "All required project files are present."
+    workingDirectory: '$(Build.SourcesDirectory)/devops-mini-main'
     displayName: 'Validate project files'
 
   - script: |
       echo "Validating package.json..."
       python3 -m json.tool package.json > /dev/null
       echo "Package JSON validation successful."
+    workingDirectory: '$(Build.SourcesDirectory)/devops-mini-main'
     displayName: 'Validate package configuration'
 
   - script: |
       mkdir -p "$(Build.ArtifactStagingDirectory)/medicare"
-
       cp index.html package.json README.md "$(Build.ArtifactStagingDirectory)/medicare/"
       cp -r css js "$(Build.ArtifactStagingDirectory)/medicare/"
-
-      echo "MediCare frontend build preparation completed."
+      echo "Frontend build preparation completed."
+    workingDirectory: '$(Build.SourcesDirectory)/devops-mini-main'
     displayName: 'Prepare frontend artifact'
 
   - task: PublishPipelineArtifact@1
